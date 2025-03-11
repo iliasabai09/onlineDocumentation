@@ -9,6 +9,7 @@ import DetailCode from "../components/DetailCode.vue";
 import EditDescription from "../components/EditDescription.vue";
 import {onMounted, ref} from "vue";
 import type {contentType} from "../interfaces";
+import EditDocument from "../components/EditDocument.vue";
 
 const {detail, updateDetail} = useDetailModule()
 
@@ -26,6 +27,7 @@ const editComponents = {
 }
 
 const editSection = ref<contentType>()
+const editDoc = ref(false);
 
 onMounted(() => {
   document.addEventListener('keydown', e => {
@@ -39,7 +41,7 @@ onMounted(() => {
 
 <template>
   <div class="detail" v-if="detail">
-    <h1>{{ detail.title }}</h1>
+    <h1 @click="editDoc = true">{{ detail.title }}</h1>
     <p class="description">{{ detail.description }}</p>
     <div class="sections">
       <section v-for="section in detail.sections">
@@ -62,6 +64,10 @@ onMounted(() => {
         :is="editComponents[editSection.type]"
         :content="editSection"
     />
+  </Dialog>
+
+  <Dialog v-model:visible="editDoc" modal header="Edit document">
+    <EditDocument :detail="detail"/>
   </Dialog>
 </template>
 
